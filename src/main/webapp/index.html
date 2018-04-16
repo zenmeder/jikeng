@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Use correct character set. -->
+<meta charset="utf-8">
+<!-- Tell IE to use the latest, best version. -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+<title>基坑监测系统</title>
+<!--script_rel-->
+<script src="ref/Cesium-1.19/Build/CesiumUnminified/Cesium.js"></script>
+<script src="ref/others/jquery.min.js"></script>
+
+<!--plugin-->
+<script type="text/javascript"
+	src="ref/Cesium-1.19/Apps/Sandcastle/Sandcastle-header.js"></script>
+
+<!-- my script-->
+<script type="text/javascript" src="js/reference/requestData.js"></script>
+<script type="text/javascript" src="js/reference/calcTimebyNum.js"></script>
+<script type="text/javascript" src="js/reference/calcDate.js"></script>
+
+<style>
+@import url(ref/Cesium-1.19/Build/CesiumUnminified/Widgets/widgets.css);
+
+html, body, #cesiumContainer {
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	z-index: -1;
+}
+
+/*#uiMenu {
+	border-radius: 5px;
+	padding: 10px;
+	position: absolute;
+	left: 20px;
+	font-family: "Arial";
+	z-index: 99999;
+}
+*/
+#toolbar {
+	width: 50%
+}
+form {
+//	width: 50%
+}
+
+</style>
+
+</head>
+<body>
+	<script src="js/d3.js"></script>
+
+	<div id="cesiumContainer" class="fullSize"></div>
+	<div style="width:50%;margin-left:10px">
+	<font id = "font-id" size="5" face="Verdana" style="color: white"> 基坑监测系统 </font>
+	</div>
+
+	<script>
+        var viewer = new Cesium.Viewer(
+                'cesiumContainer',
+                {
+                    imageryProvider : new Cesium.ArcGisMapServerImageryProvider(
+                            {
+                                url : 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+                            }),
+                    baseLayerPicker : false,
+                    timeline : false,
+                    homebutton : false,
+                    animation : false
+               });
+	</script>
+
+	<script type="text/javascript" src="js/execute/createModel.js"></script>
+	<script type="text/javascript" src="js/execute/JKCover.js"></script>
+	<script type="text/javascript" src="js/execute/DataView.js"></script>
+	<script type="text/javascript" src="js/execute/gui.js"></script>
+	<!--script type="text/javascript" src="js/execute/mouseLocation.js"></script-->
+	<!--测试样例 -->
+	<!--script type="text/javascript" src="js/execute/warning_test.js"></script-->
+	
+	<!-- Toolbar for Selecting Time ,which is already solved by JS HTML DOM in gui.js  -->
+	<!--form
+		oninput="var selectedTime = calcTimebyNum(SelectTimeToolbar.value); console.log('selectedTime:' + myDate + selectedTime);
+	showHistoryData(myDate + selectedTime); SelectedTimeDisplay.value=selectedTime">
+		<input name="SelectTimeToolbar" type="range" max=143 min=0 step=1></input>
+		<output name="SelectedTimeDisplay"></output>
+	</form-->
+
+	<script type="text/javascript">
+        setTimeout("$('#backToJK').click();", 2000);		
+	</script>
+
+</body>
+</html>

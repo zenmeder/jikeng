@@ -1,0 +1,185 @@
+<script src="js/d3.js"></script>
+<script src="ref/others/jquery.min.js"></script>
+	<style type="text/css">
+		.axis path,
+		.axis line {
+		  fill: none;
+		  stroke: #000;
+		  shape-rendering: crispEdges;
+		}
+
+		.x.axis path {
+		  /*display: none;*/
+		}
+
+		.line {
+		  fill: none;
+		  stroke: steelblue;
+		  stroke-width: 1.5px;
+		}
+		.cesium-infoBox-description {		    
+		    text-align:center;
+		}
+	</style>
+	<body id = "chart-container">
+<!-- <div id = "sbsb">123456789</div> -->
+<script type="text/javascript">
+	console.log("iframe:", $(this)[0].name);
+	var usefulID = parseInt($(this)[0].name[2]);
+	var url = "/jikeng/SelectCurrentData";
+//	var date='2015-03-01';
+	var date = '2014-03-03';
+	iData= "date="+"calTHC:"+date;
+	$.ajax({
+		type:"post",
+		url:url,
+		cache:false,
+		dataType:"text",
+		data:iData,
+		success:function(data){
+			 console.log("ajaxdata "+data);
+			var lines = data.split(";");
+			var usefulData = {};
+			var sensorID = 0;
+			lines.forEach(function(item)
+				{
+					usefulData[sensorID] = [];
+					var valueArray = item.split(",");
+					var depth = 0;
+					console.log('valueArray: ',valueArray);
+					valueArray.forEach(function(value)
+						{
+							var object = {};
+							object['depth'] = depth + 1;
+							object['summary'] = parseFloat(value.split(".")[0]);
+							usefulData[sensorID].push(object);
+							++depth;
+						});
+					++sensorID;
+				});
+			console.log("usefulData:", usefulData);
+			window.usefulData = usefulData;
+			show();
+		},
+		error: function(){
+			console.log('THCError!');
+		}
+	
+	});
+</script>
+	<script type="text/javascript">
+		function show(selectedData)
+		{
+			$(".cesium-infoBox-description").css({
+				"text-align": "center"
+			});
+			if ($("#sb"))
+			{
+				console.log("sb is not null");
+				$("#sb").remove();
+			}
+			$("<div id = 'sb'></div>").appendTo($("#chart-container"));
+			// $("<div></div>").attr("id", "sb");
+			// console.log($("#sb"));
+			console.log("window.data:", window.data);
+			$("#sb").css({
+				"width": "100%",
+				"height": "100%",
+				// "top": "100%",
+				// "left": "1%",
+				// "background-color": {r:84,g:84,b:84,a:1.0},
+				"background-color": "white",
+				// "display": block,
+				"position": "absolute",
+				"text-align":"center"
+			});
+
+			var originSize = $("#sb").width();
+			
+			var margin = {top: originSize * 0.056818182, right: originSize / 10, bottom: originSize * 0.085, left: originSize / 10},
+			    width = $("#sb").width() * 0.9 - margin.left - margin.right,
+			    height = $("#sb").height() * 0.9 - margin.top - margin.bottom;
+
+			// var padding = ($("#sb").height() - height) / 2;
+			// $("#sb").css({
+			// 	"padding-top": padding,
+			// 	"padding-bottom": padding
+			// });
+
+			var formatPercent = d3.format(".0%");
+			console.log("width is "+width+" height is "+height);
+			var x = d3.scale.ordinal()
+			    .rangeRoundBands([0, width]);
+
+
+			var y = d3.scale.linear()
+			    .range([height, 0]);
+
+			var xAxis = d3.svg.axis()
+			    .scale(x)
+			    .orient("bottom");
+
+			var yAxis = d3.svg.axis()
+			    .scale(y)
+			    .orient("left");
+
+			var line = d3.svg.line()
+			    .x(function(d) { return x(d.depth); })
+			    .y(function(d) { return y(d.summary); });
+
+			var svg = d3.select("#sb").append("svg")
+			    .attr("width", width + margin.left + margin.right)
+			    .attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			d3.tsv("line.data.tsv?_v=" + new Date().getTime(), type, function(error, data) {
+			  if (error) throw error;
+			  data = usefulData[usefulID];
+			  console.log("usefulData:", data);
+	// console.log("max:", d3.max(data, function(d) { return d.summary; }));
+			  x.domain(data.map(function(d) { return d.depth; }));
+			  y.domain([0, d3.max(data, function(d) { return d.summary; })]);
+
+			  // x.domain(d3.extent(data, function(d) { return d.date; }));
+			  // y.domain(d3.extent(data, function(d) { return d.close; }));
+
+			  svg.append("g")
+			      .attr("class", "x axis")
+			      .attr("transform", "translate(0," + height + ")")
+			      .call(xAxis)
+			      .append("text")
+			      .attr('x', width)
+			      .attr('dx', '.71em')
+			      .attr("transform", "translate(10, -10)")
+			      .style("text-anchor", 'end')
+			      .text('深度')
+			      ;
+
+			  svg.append("g")
+			      .attr("class", "y axis")
+			      .call(yAxis)
+				  .append("text")
+			      .attr("transform", "rotate(-90)")
+			      .attr("y", 6)
+			      .attr("dy", ".71em")
+			      .style("text-anchor", "end")
+			      .text("形变量");
+
+			  svg.append("path")
+			      .datum(data)
+			      .attr("class", "line")
+			      .attr("transform", "translate(" + width * 0.036253776 + "," + 0 + ")")
+			      .attr("d", line);
+			});
+
+			function type(d) {
+				d.summary = +d.summary;
+				return d;
+			  // d.date = formatDate.parse(d.date);
+			  // d.close = +d.close;
+			  // return d;
+			}
+		}
+	</script>
+</body>
