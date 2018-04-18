@@ -15,4 +15,12 @@
 		<servlet-name>SelectCurrentData</servlet-name>
 		<url-pattern>/SelectCurrentData</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetAllModels</servlet-name>
+		<servlet-class>Servlet.GetAllModels</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAllModels</servlet-name>
+		<url-pattern>/GetAllModels</url-pattern>
+	</servlet-mapping>
 </web-app>

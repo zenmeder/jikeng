@@ -1,6 +1,8 @@
 package Mysql;
 
-import org.json.JSONArray;
+//import org.json.JSONArray;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import java.sql.*;
 import java.util.*;
@@ -30,6 +32,49 @@ public class LinkToMysql {
         }
     }
 
+    /**
+     * 获取所有可用的模型
+     * @return JSONArray
+     * todo 根据用户名来筛选展示哪些模型
+     */
+    public JSONArray getModels(){
+        String sql = "select * from models";
+        JSONArray res = new JSONArray();
+        try{
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                JSONObject ja = new JSONObject();
+                ja.put("modelName", rs.getString("modelName"));
+                ja.put("latitude", rs.getString("latitude"));
+                ja.put("longitude", rs.getString("longitude"));
+                ja.put("height", rs.getString("height"));
+                ja.put("modelUrl", rs.getString("modelUrl"));
+                if(findColumn(rs, "scale"))
+                    ja.put("scale", rs.getString("scale"));
+                if(findColumn(rs, "description"))
+                    ja.put("description", rs.getString("description"));
+                res.add(ja);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    /**
+     * 判断resultSet中有没有指定列
+     * @param rs resultSet
+     * @param columnLabels 列名
+     * @return Boolean
+     */
+    public Boolean findColumn(ResultSet rs, String columnLabels){
+        try{
+            rs.findColumn(columnLabels);
+        }catch (Exception e){
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
     /**
      * 将模型的名字，经纬度以及高度等信息存入models表中
      * @param modelName 模型名
@@ -80,25 +125,22 @@ public class LinkToMysql {
     /**
      * 通过modelName查询传感器及其位置信息
      * @param modelName 传感器名
-     * @return Map<Integer, String>
+     * @return Map<Integer, JSONObject>
      */
-    public Map<Integer, String> getSensorPosition(String modelName){
+    public Map<Integer, JSONObject> getSensorPosition(String modelName){
 
         String sql = "select * from sensor where modelName="+"\""+modelName+"\"";
-        Map<Integer, String> hm = new HashMap<Integer, String>();
-        Map<String, String> params = new HashMap<String, String>();
+        Map<Integer, JSONObject> hm = new HashMap<Integer, JSONObject>();
         try{
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()){
-                JSONArray ja = new JSONArray();
+                JSONObject jo = new JSONObject();
                 Integer sensorId = rs.getInt("sensorId");
-                params.put("latitude", rs.getString("latitude"));
-                params.put("longitude", rs.getString("longitude"));
-                params.put("height", rs.getString("height"));
-                ja.put(params);
-                hm.put(sensorId, ja.toString());
+                jo.put("latitude", rs.getString("latitude"));
+                jo.put("longitude", rs.getString("longitude"));
+                jo.put("height", rs.getString("height"));
+                hm.put(sensorId, jo);
             }
-
         }catch (SQLException e){
             e.printStackTrace();
         }
