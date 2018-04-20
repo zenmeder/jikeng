@@ -16,10 +16,23 @@ public class MysqlUtil {
 
     public static void  main(String[] args){
         LinkToMysql ltm = new LinkToMysql();
-        Map<Integer, JSONObject> m = ltm.getSensorPosition("jikeng1");
-        for(Map.Entry<Integer, JSONObject> entry: m.entrySet()){
+//        JSONArray ja = ltm.getSensorPosition("jikeng1");
+//        JSONArray ja2 = ltm.getSensorPosition("jikeng2");
+//        System.out.println(ja);
+//        System.out.println(ja2);
+//        System.out.println(ja.addAll(ja2));
+//        System.out.println(ja);
+//        String s = "[\"jikeng1\",\"jikeng2\"]";
+//        JSONArray ja = JSONArray.fromObject(s);
+//        System.out.println(ja);
+//        for(int i = 0; i<ja.size();i++){
+//            System.out.println(ja.get(i).toString());
+//        }
+//        System.out.println(JSONObject.toBean(s));
+//        Map<Integer, JSONObject> m = ltm.getSensorPosition("jikeng1");
+//        for(Map.Entry<Integer, JSONObject> entry: m.entrySet()){
 //            System.out.println(entry.getValue().get("height"));
-        }
+//        }
 //        JSONArray r = ltm.getModels();
 //        System.out.println(r);
 //        for (int i = 0; i<r.size();i++){
@@ -37,15 +50,15 @@ public class MysqlUtil {
 //        ltm.insertSensorPosition("jikeng1",1,"121.614983531255533,31.122592361610856");
 //        for(int i = 1; i<=6;i++){
 //            double longitude = 121.614983531255533+ i * 0.000012782699573203141 + 0.0000063913497866;
-//            double latitude = 31.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
+//            double latitude = 33.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
 //            double height = 18.0;
-//            ltm.insertSensorPositionByLLH("jikeng1", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
+//            ltm.insertSensorPositionByLLH("jikeng3", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
 //        }
 //        Map<Integer, String> m = ltm.getSensorPosition("jikeng1");
 //        for(Map.Entry<Integer, String> entry: m.entrySet()){
 //            System.out.println("sensorId is "+ entry.getKey()+", value is "+entry.getValue());
 //        }
-//        ltm.insertModel("jikeng1", "31.12263393139467", "121.6149828457345", "18","", "0.3", "jikengken" );
+//        ltm.insertModel("jikeng3", "33.12263393139467", "121.6149828457345", "18","", "0.3", "jikengken3" );
 
     }
 }

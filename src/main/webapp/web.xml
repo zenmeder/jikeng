@@ -23,4 +23,12 @@
 		<servlet-name>GetAllModels</servlet-name>
 		<url-pattern>/GetAllModels</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetAllSensors</servlet-name>
+		<servlet-class>Servlet.GetAllSensors</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAllSensors</servlet-name>
+		<url-pattern>/GetAllSensors</url-pattern>
+	</servlet-mapping>
 </web-app>

@@ -127,24 +127,28 @@ public class LinkToMysql {
      * @param modelName 传感器名
      * @return Map<Integer, JSONObject>
      */
-    public Map<Integer, JSONObject> getSensorPosition(String modelName){
+    public JSONArray getSensorPosition(String modelName){
 
-        String sql = "select * from sensor where modelName="+"\""+modelName+"\"";
-        Map<Integer, JSONObject> hm = new HashMap<Integer, JSONObject>();
+        String sql = "select * from sensors where modelName="+"\""+modelName+"\"";
+//        Map<Integer, JSONObject> hm = new HashMap<Integer, JSONObject>();
+        JSONArray ja = new JSONArray();
         try{
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()){
                 JSONObject jo = new JSONObject();
-                Integer sensorId = rs.getInt("sensorId");
+//                Integer sensorId = rs.getInt("sensorId");
+                jo.put("modelName", modelName);
+                jo.put("sensorId", rs.getInt("sensorId"));
                 jo.put("latitude", rs.getString("latitude"));
                 jo.put("longitude", rs.getString("longitude"));
                 jo.put("height", rs.getString("height"));
-                hm.put(sensorId, jo);
+                ja.add(jo);
             }
+//            System.err.println("getSensorPosition output is "+ja);
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return hm;
+        return ja;
     }
 
     /**
@@ -155,7 +159,7 @@ public class LinkToMysql {
      */
     public void insertSensorPosition(String modelName, Integer sensorId, String position){
         try{
-            String sql = "insert into sensor(modelName, sensorId, position) values ("+"\""+modelName+"\""+", "+sensorId+", ";
+            String sql = "insert into sensors(modelName, sensorId, position) values ("+"\""+modelName+"\""+", "+sensorId+", ";
             sql += "\"" + position +"\")";
             stmt.execute(sql);
         }catch (SQLException e){
@@ -172,7 +176,7 @@ public class LinkToMysql {
      * @param height 高度
      */
     public void insertSensorPositionByLLH(String modelName, Integer sensorId,String latitude, String longitude, String height){
-        String sql = "insert into sensor(modelName, sensorId, latitude, longitude, height) values (";
+        String sql = "insert into sensors(modelName, sensorId, latitude, longitude, height) values (";
         sql += "\""+modelName+"\",";
         sql += "\""+sensorId+"\",";
         sql += "\""+latitude+"\",";

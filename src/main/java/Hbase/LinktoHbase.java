@@ -190,7 +190,7 @@ public class LinktoHbase {
 			for (Result r : rs) {
 				if (n-- < 0)
 					break;
-				System.out.println("????rowkey:" + new String(r.getRow()));
+//				System.out.println("????rowkey:" + new String(r.getRow()));
 				for (KeyValue rowKV : r.raw()) {
 					System.out.print("Row Name: " + new String(rowKV.getRow()) + " ");
 					System.out.print("Timestamp: " + rowKV.getTimestamp() + " ");
@@ -294,7 +294,7 @@ public class LinktoHbase {
 				String temp = new String(r.getRow());
 				if (!stringHandle.compareTime(temp, time))
 					break;
-				System.out.println("????rowkey:" + temp);
+//				System.out.println("????rowkey:" + temp);
 				for (KeyValue rowKV : r.raw()) {
 					// ?????????????????
 
@@ -333,7 +333,7 @@ public class LinktoHbase {
 			for (Result r : rs) {
 				//if (n-- < 0)
 					//break;
-				System.out.println("????rowkey:" + new String(r.getRow()));
+//				System.out.println("????rowkey:" + new String(r.getRow()));
 				for (KeyValue rowKV : r.raw()) {
 					String mTime = new String(rowKV.getRow()) + ";";
 					String mDepth = new String(rowKV.getQualifier()) + ";";
@@ -366,7 +366,7 @@ public class LinktoHbase {
 			myScanner.setReversed(true);
 			ResultScanner rs = table.getScanner(myScanner);
 			for (Result r : rs) {
-				System.out.println("???rowkey:" + new String(r.getRow()));
+//				System.out.println("???rowkey:" + new String(r.getRow()));
 				for (KeyValue rowKV : r.raw()) {
 					String mTime = new String(rowKV.getRow()) + ";";
 					// ????????????????????

@@ -25,7 +25,7 @@ public class DatatoJson {
 		
 		jsonObject.put("time", time);		
 		//����sensorID��2,3,4,5,9,10��0,1,2,3,4,5��ӳ�䴦��
-		System.out.println("sensorId:" + sensorID);
+//		System.out.println("sensorId:" + sensorID);
 		int sensorid=Integer.parseInt(sensorID);
 		switch(sensorid){
 			case 1: sensorid = 5;break;
