@@ -317,10 +317,10 @@ public class LinktoHbase {
 
 	// ????????? ?? ??????
 	public static JSONArray SelectDatabyTime(String startTime, String endTime, String tableName) throws IOException {
-		System.out.println("endTime:" + endTime);
-		//int n = 100;
+//		System.out.println("endTime:" + endTime);
+//		System.out.println("startTime: "+startTime);
+//		System.out.println("tableName:"+tableName);
 		HTable table = null;
-		// ?????????JsonTable
 		JSONArray jsonTable = new JSONArray();
 		try {
 			table = new HTable(conf, tableName);
@@ -331,10 +331,8 @@ public class LinktoHbase {
 			myScanner.setStopRow(endBytes);
 			ResultScanner rs = table.getScanner(myScanner);
 			for (Result r : rs) {
-				//if (n-- < 0)
-					//break;
-//				System.out.println("????rowkey:" + new String(r.getRow()));
 				for (KeyValue rowKV : r.raw()) {
+					System.out.println(rowKV);
 					String mTime = new String(rowKV.getRow()) + ";";
 					String mDepth = new String(rowKV.getQualifier()) + ";";
 					String mValue = new String(rowKV.getValue());

@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  */
 
 /**
- * Servlet implementation class SelectCurrentData
+ * Servlet implementation class GetAllSensors
  */
 @WebServlet("/GetAllSensors")
 public class GetAllSensors extends HttpServlet {

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/echarts.js"></script>
+    <script src="ref/others/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    option = {
+        xAxis: {
+            type: 'category',
+            data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 12,1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line'
+        }]
+    };
+    var url = "/jikeng/GetCurrentData";
+    var date = "2015-03-02";
+    var modelName = "jikeng1";
+    var iData =  "date="+date+"&modelName="+modelName;
+
+    $.ajax({
+        type:"post",
+        url:url,
+        cache:false,
+        dataType:"text",
+        data:iData,
+        success: function (data) {
+            console.log("getcurrentdata:"+data);
+        },
+        error: function () {
+            console.log("GetCurrentData error!");
+        }
+    });
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+
+</body>
+</html>

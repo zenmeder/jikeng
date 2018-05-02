@@ -8,12 +8,13 @@ import net.sf.json.JSONObject;
 public class DatatoJson {
 	static void InsertJsonTable(JSONArray jsonTable,String data) {
 		String mdata = data;
+		System.out.println("mdata is "+mdata);
 		JSONObject jsonObject=new JSONObject();
 		String time = mdata.substring(0, mdata.indexOf("|"));
 //		System.out.println("mdata is "+mdata);
 		//���ݴ�д��Z��Сд��z
 //		if(mdata.indexOf("Z")!=-1)
-		mdata = mdata.substring(mdata.indexOf("P")+2);
+		mdata = mdata.substring(mdata.indexOf("|")+1);
 //		else if(mdata.indexOf("z")!=-1)
 //			mdata = mdata.substring(mdata.indexOf("z")+1);
 		String sensorID = mdata.substring(0, mdata.indexOf(";"));
@@ -24,17 +25,15 @@ public class DatatoJson {
 		String value =mdata;	
 		
 		jsonObject.put("time", time);		
-		//����sensorID��2,3,4,5,9,10��0,1,2,3,4,5��ӳ�䴦��
-//		System.out.println("sensorId:" + sensorID);
 		int sensorid=Integer.parseInt(sensorID);
-		switch(sensorid){
-			case 1: sensorid = 5;break;
-			case 2: sensorid = 4;break;
-			case 3: sensorid = 3;break;
-			case 4: sensorid = 2;break;
-			case 5: sensorid = 1;break;
-			case 6:sensorid = 0;break;
-		}
+//		switch(sensorid){
+//			case 1: sensorid = 5;break;
+//			case 2: sensorid = 4;break;
+//			case 3: sensorid = 3;break;
+//			case 4: sensorid = 2;break;
+//			case 5: sensorid = 1;break;
+//			case 6:sensorid = 0;break;
+//		}
 		jsonObject.put("sensorID", sensorid);
 		jsonObject.put("depthID", Integer.parseInt(depthID));
 		jsonObject.put("value", Double.parseDouble(value));

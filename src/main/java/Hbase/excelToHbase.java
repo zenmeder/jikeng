@@ -23,19 +23,16 @@ import Hbase.HBaseUtils;
 public class excelToHbase {
   public static void main(String[] args){
 	  excelToHbase dataconverter=new excelToHbase();
+	  String modelName = "jikeng1";
 	  try{
-		  String[] families={"d"};
-		  if(!HBaseUtils.doesTableExists("band4"))
-		  HBaseUtils.creatTable("band4",families);
+		  String[] families={"depth"};
+		  if(!HBaseUtils.doesTableExists(modelName))
+		  HBaseUtils.creatTable(modelName,families);
 		  else{
-			  HBaseUtils.deleteTable("band4");
-			  HBaseUtils.creatTable("band4",families);
+			  HBaseUtils.deleteTable(modelName);
+			  HBaseUtils.creatTable(modelName,families);
 		  }
-//		  if(args.length>0)
-//            dataconverter.execute("/Users/zhaoyu/Desktop/jikeng/src/main/webapp/dataSample.xls","band4");
-          dataconverter.execute("/root/Desktop/dataSample.xls","band4");
-//		  else
-//			  System.out.println("please input the file path");
+            dataconverter.execute("/Users/zhaoyu/Desktop/jikeng/src/main/webapp/dataSample.xls",modelName);
 	  }
 	  catch(Exception e){
 		  e.printStackTrace();
@@ -57,12 +54,10 @@ public class excelToHbase {
           String sheetName=hssfSheet.getSheetName();
           System.out.println("---------------------------------"+sheetName+"--------------------");
           // 获取当前工作薄的每一行
-//          System.out.println(hssfSheet.getLastRowNum());
-
           for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
         	  try {
         		  if(rowNum%10==0)
-      			Thread.sleep(50000);
+      			    Thread.sleep(1000);
       		} catch (InterruptedException e) {
       			// TODO Auto-generated catch block
       			e.printStackTrace();
@@ -72,10 +67,10 @@ public class excelToHbase {
             	  Date date=hssfRow.getCell(1).getDateCellValue();
         		  String pattern="yyyy-MM-dd hh:mm:ss";
         		  String strDate= date==null ? " " : new SimpleDateFormat(pattern).format(date);
-        		  String key=strDate+"|"+sheetName;
+        		  String key=strDate+"|"+sheetName.substring(2);
         		  for(int cellNum=2;cellNum<=hssfRow.getLastCellNum();cellNum++){
             		  if(hssfRow.getCell(cellNum)!=null){
-            			  HBaseUtils.updateTable(table, key, "d", new Integer(cellNum-2).toString(), hssfRow.getCell(cellNum).toString());
+            			  HBaseUtils.updateTable(table, key, "depth", new Integer(cellNum-2).toString(), hssfRow.getCell(cellNum).toString());
             		  }
             	  }
               }

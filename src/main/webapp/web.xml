@@ -31,4 +31,12 @@
 		<servlet-name>GetAllSensors</servlet-name>
 		<url-pattern>/GetAllSensors</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetCurrentData</servlet-name>
+		<servlet-class>Servlet.GetCurrentData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetCurrentData</servlet-name>
+		<url-pattern>/GetCurrentData</url-pattern>
+	</servlet-mapping>
 </web-app>

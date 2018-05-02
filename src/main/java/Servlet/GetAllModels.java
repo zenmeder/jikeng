@@ -18,7 +18,7 @@ import javax.servlet.annotation.WebServlet;
  */
 
 /**
- * Servlet implementation class SelectCurrentData
+ * Servlet implementation class GetAllModels
  */
 @WebServlet("/GetAllModels")
 public class GetAllModels extends HttpServlet {
