@@ -41,21 +41,21 @@ public class GetCurrentData extends HttpServlet {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setDateHeader("Expires", 0);
 		String jsonpCallback = request.getParameter("jsonpCallback");
+//		System.out.println("jsonpCALLBACK is :"+jsonpCallback);
 		PrintWriter out = response.getWriter();
 		JSONArray jsonpOut = new JSONArray();
 		String tableName = modelName;
 		if (date.equals("now")) {
 			jsonpOut = LinktoHbase.SelectMyCurrentData(tableName);
 			Data4exchange.getInstance().setCurrentData(jsonpOut);
-			out.println(jsonpCallback + "(" + jsonpOut + ")");// ????jsonp???????
-
+			out.println(jsonpCallback + "(" + jsonpOut + ")");
 		}
 		else {
-			System.out.println("date is "+date+", modelName is "+modelName);
+//			System.out.println("date is "+date+", modelName is "+modelName);
 			String startTime = date + " 00:00:01";
 			String endTime = date + " 23:59:59";
 			jsonpOut = LinktoHbase.SelectDatabyTime(startTime, endTime, tableName);
-			out.println(jsonpCallback + "(" + jsonpOut + ")");// ????jsonp???????
+			out.println(jsonpCallback + "(" + jsonpOut + ")");
 		}
 		out.flush();
 		out.close();

@@ -8,15 +8,10 @@ import net.sf.json.JSONObject;
 public class DatatoJson {
 	static void InsertJsonTable(JSONArray jsonTable,String data) {
 		String mdata = data;
-		System.out.println("mdata is "+mdata);
+//		System.out.println("mdata is "+mdata);
 		JSONObject jsonObject=new JSONObject();
 		String time = mdata.substring(0, mdata.indexOf("|"));
-//		System.out.println("mdata is "+mdata);
-		//���ݴ�д��Z��Сд��z
-//		if(mdata.indexOf("Z")!=-1)
 		mdata = mdata.substring(mdata.indexOf("|")+1);
-//		else if(mdata.indexOf("z")!=-1)
-//			mdata = mdata.substring(mdata.indexOf("z")+1);
 		String sensorID = mdata.substring(0, mdata.indexOf(";"));
 
 		mdata = mdata.substring(mdata.indexOf(";")+1);
@@ -34,8 +29,8 @@ public class DatatoJson {
 //			case 5: sensorid = 1;break;
 //			case 6:sensorid = 0;break;
 //		}
-		jsonObject.put("sensorID", sensorid);
-		jsonObject.put("depthID", Integer.parseInt(depthID));
+		jsonObject.put("sensorId", sensorid);
+		jsonObject.put("depth", Integer.parseInt(depthID));
 		jsonObject.put("value", Double.parseDouble(value));
 		jsonTable.add(jsonObject);		
 	}

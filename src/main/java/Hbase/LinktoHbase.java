@@ -314,9 +314,37 @@ public class LinktoHbase {
 
 		return jsonTable;
 	}
-
-	// ????????? ?? ??????
 	public static JSONArray SelectDatabyTime(String startTime, String endTime, String tableName) throws IOException {
+		HTable table = null;
+		JSONArray jsonTable = new JSONArray();
+		try {
+			table = new HTable(conf, tableName);
+			Scan myScanner = new Scan();
+			byte[] startBytes = startTime.getBytes("UTF8");
+			byte[] endBytes = endTime.getBytes("UTF8");
+			myScanner.setStartRow(startBytes);
+			myScanner.setStopRow(endBytes);
+			ResultScanner rs = table.getScanner(myScanner);
+			for (Result r : rs) {
+				for (KeyValue rowKV : r.raw()) {
+					String mTime = new String(rowKV.getRow()) + ";";
+					String mDepth = new String(rowKV.getQualifier()) + ";";
+					String mValue = new String(rowKV.getValue());
+					String mData = mTime + mDepth + mValue;
+					DatatoJson.InsertJsonTable(jsonTable, mData);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (table != null)
+				table.close();
+		}
+
+		return jsonTable;
+	}
+	// ????????? ?? ??????
+	public static JSONArray SelectDatabyTime1(String startTime, String endTime, String tableName) throws IOException {
 //		System.out.println("endTime:" + endTime);
 //		System.out.println("startTime: "+startTime);
 //		System.out.println("tableName:"+tableName);
@@ -332,7 +360,7 @@ public class LinktoHbase {
 			ResultScanner rs = table.getScanner(myScanner);
 			for (Result r : rs) {
 				for (KeyValue rowKV : r.raw()) {
-					System.out.println(rowKV);
+//					System.out.println(rowKV);
 					String mTime = new String(rowKV.getRow()) + ";";
 					String mDepth = new String(rowKV.getQualifier()) + ";";
 					String mValue = new String(rowKV.getValue());

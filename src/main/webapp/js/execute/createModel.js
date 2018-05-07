@@ -72,6 +72,7 @@ function getModels(userName) {
         async: false,
         success: function (data) {
             console.log("got all models!");
+            console.log(data);
             for (i = 0; i < data.length; i++) {
                 // console.log(10+i, true, parseFloat(data[i].longitude),parseFloat(data[i].latitude), data[i].modelUrl, parseFloat(data[i].height), parseFloat(data[i].scale), data[i].modelName, data[i].description);
                 modelName.push(data[i].modelName);
