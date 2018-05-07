@@ -38,10 +38,17 @@ function createModel(id, show, Longitude, Latitude, url, height, scale, name,
  * @param i
  */
 function createSensor(data, i) {
-    description = "table to do";
-    // console.log(i, data.longitude,data.latitude, data.height);
+    // description = "table to do";
+    // console.log(i, data.modelName);
+    // console.log();
+    // date = DatePicker.val();
+    description =
+				'<iframe class = "linechart" name = "' + 'CP' + i
+        + '" src="newLineChart.html?date=2015-02-28'+'&modelName='+ data.modelName+'&sensorId='+i
+        + '" scrolling="no" height="500" width = "1200" sandbox="allow-top-navigation \
+					allow-same-origin allow-scripts allow-popups allow-forms" frameborder="0" ></iframe>';
     viewer.entities.add({
-        name: '监测孔:' + (i + 1),
+        name: '监测孔:' + i,
         id: 'Sensor' + data.modelName + '-' + i,
         position: Cesium.Cartesian3.fromDegrees(parseFloat(data.longitude), parseFloat(data.latitude), parseFloat(data.height)),
         ellipsoid: {
@@ -54,6 +61,7 @@ function createSensor(data, i) {
         description: description
     });
 }
+
 var modelName = new Array();
 /**
  * 根据用户名先调用GetAllModels获得该用户名所对应的所有model的modelName，
@@ -93,7 +101,7 @@ function getModels(userName) {
                     console.log("got all sensors!");
                     console.log(data);
                     for (i = 0; i < data.length; i++) {
-                        createSensor(data[i], i);
+                        createSensor(data[i], data[i].sensorId);
                     }
                 },
                 error: function () {
@@ -132,7 +140,6 @@ function getModels(userName) {
 
 // createModel(12345, true, 12.6149828457345, 31.12263393139467, "models/123_out/123.gltf", 10,0.3,"lll","dsfjkl");
 getModels("jikeng1");
-
 // createModel(
 // 		12,
 // 		true,

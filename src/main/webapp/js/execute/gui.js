@@ -60,11 +60,11 @@ historyBox.css({
 function log_c(){
 	myDate = DatePicker.val();
 	console.log(myDate);
-
-	window.clearInterval(DrawControl);
-	window.clearInterval(nowFunc);
-	sendDateBack(myDate);
-	useHistory = 1;
+	return myDate;
+	// window.clearInterval(DrawControl);
+	// window.clearInterval(nowFunc);
+	// sendDateBack(myDate);
+	// useHistory = 1;
 }
 var DatePicker_div = $("<div id='datepicker_div'></div>").css({
 	"top" : "40px",
@@ -73,7 +73,9 @@ var DatePicker_div = $("<div id='datepicker_div'></div>").css({
 });
 //2013-10-05 is default
 //var DatePicker = $("<input type='date' id='datepicker' value='2013-10-05' min='2013-10-05' max='2013-10-10' onchange='log_c()'/>");
-var DatePicker = $("<input type='date' id='datepicker' value='2015-02-28' onchange='log_c()'/>");
+// var DatePicker = $("<input type='date' id='datepicker' value='2015-02-28' onchange='changeDate()'/>");
+var DatePicker = $("<input type='date' id='datepicker' value="+sessionStorage.getItem('currentDate')+" onchange='changeDate()'/>");
+
 DatePicker.appendTo($("#history-box"));
 // DatePicker_div.appendTo($("body"));
 

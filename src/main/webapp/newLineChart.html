@@ -9,16 +9,24 @@
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div id="main" style="width: 600px;height:400px;"></div>
+<script type="text/javascript" src="js/execute/date.js"></script>
+
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    console.log(localStorage.getItem("currentDate"));
+//    console.log("iframe:", GetQueryString("modelName"));
     var myChart = echarts.init(document.getElementById('main'));
-
-
     var url = "/jikeng/GetCurrentData";
-    var date = "2015-03-02";
-    var modelName = "jikeng1";
+//    var date = GetQueryString("date");
+    var date = sessionStorage.getItem("currentDate");
+    var modelName = GetQueryString("modelName");
     var iData =  "date="+date+"&modelName="+modelName;
-
+    var sensorId = GetQueryString("sensorId");
     $.ajax({
         type:"post",
         url:url,
@@ -30,70 +38,92 @@
         success: function (data) {
 //            console.log("getcurrentdata:"+data);
             values = new Array();
-            sensorId = new Array();
+//            sensorId = new Array();
             depth = new Array();
             for(var i = 0; i<data.length;i++){
                 if(typeof(values[data[i].sensorId-1]) == "undefined"){
                     values[data[i].sensorId-1] = new Array();
-                    sensorId.push("sensor"+data[i].sensorId);
+//                    sensorId.push("sensor"+data[i].sensorId);
                 }
                 values[data[i].sensorId-1][data[i].depth] = data[i].value;
             }
-            for(var i = 0;i<values[0].length;i++){
-                depth.push(i);
+            for(var j = 0;j<values[0].length;j++){
+                depth.push(j);
             }
-            console.log("values is: "+values);
+//            console.log("values is: "+values);
+//            console.log("depth is:"+depth);
             options = {
-                title: {
-                    text: date+" "+modelName+'传感器数据图'
+                title:{
+                    text:date+" "+modelName+'监测孔'+sensorId+'数据图'
                 },
-                tooltip : {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#6a7985'
-                        }
-                    }
+                xAxis: {
+                    type: 'category',
+                    data: depth
                 },
-//                legend: {
-//                    data:sensorId
-//                },
-                toolbox: {
-                    feature: {
-                        saveAsImage: {}
-                    }
+                yAxis: {
+                    type: 'value'
                 },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                tooltip: {
+                    trigger: 'axis'
                 },
-                xAxis : [
-                    {
-                        type : 'category',
-                        boundaryGap : false,
-                        data : depth
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value'
-                    }
-                ]
+                series: [{
+                    data: values[sensorId-1],
+                    type: 'line'
+                }]
             };
-            options["series"] = new Array();
-            for(var i = 0; i<sensorId.length;i++){
-                var d = {
-                    name:sensorId[i],
-                        type:'line',
-                    stack: '总量',
-                    areaStyle: {normal: {}},
-                    data:values[i]
-                };
-                options["series"].push(d);
-            }
+//            options = {
+//                title: {
+//                    text: date+" "+modelName+'传感器数据图',
+//                },
+//                tooltip : {
+//                    trigger: 'axis',
+//                    axisPointer: {
+//                        type: 'cross',
+//                        label: {
+//                            backgroundColor: '#6a7985'
+//                        }
+//                    }
+//                },
+////                legend: {
+////                    data:sensorId
+////                },
+//                toolbox: {
+//                    feature: {
+//                        saveAsImage: {}
+//                    }
+//                },
+//                grid: {
+//                    left: '3%',
+//                    right: '4%',
+//                    bottom: '3%',
+//                    containLabel: true
+//                },
+//                xAxis : [
+//                    {
+//                        type : 'category',
+//                        boundaryGap : false,
+//                        data : depth
+//                    }
+//                ],
+//                yAxis : [
+//                    {
+//                        type : 'value'
+//                    }
+//                ]
+//            };
+//            options["series"] = new Array();
+//            for(i = 0; i<sensorId.length;i++){
+//                if(postSensorId == sensorId[i]){
+//                    var d = {
+//                        name:sensorId[i],
+//                        type:'line',
+//                        stack: '总量',
+//                        areaStyle: {normal: {}},
+//                        data:values[i]
+//                    };
+//                    options["series"].push(d);
+//                }
+//            }
             console.log(options);
             myChart.setOption(options);
 
