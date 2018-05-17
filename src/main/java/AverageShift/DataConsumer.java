@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class DataConsumer {
     private static KafkaConsumer<String, String> consumer;
-    private static String topic = "test";
+    private static String topic = "demo";
     public DataConsumer(String zookeeper, String groupId, String topic){
         Properties props = new Properties();
         //定义连接zookeeper信息

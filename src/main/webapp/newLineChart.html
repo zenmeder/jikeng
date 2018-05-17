@@ -18,14 +18,17 @@
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]); return null;
     }
-    console.log(localStorage.getItem("currentDate"));
+    console.log(sessionStorage.getItem("currentDate"));
 //    console.log("iframe:", GetQueryString("modelName"));
     var myChart = echarts.init(document.getElementById('main'));
     var url = "/jikeng/GetCurrentData";
 //    var date = GetQueryString("date");
     var date = sessionStorage.getItem("currentDate");
+    if(date==null){
+        date = "2014-03-27";
+    }
     var modelName = GetQueryString("modelName");
-    var iData =  "date="+date+"&modelName="+modelName;
+    var iData =  "date="+date+"&modelName="+modelName+"&modelNums=single";
     var sensorId = GetQueryString("sensorId");
     $.ajax({
         type:"post",
@@ -36,7 +39,7 @@
         jsonp: "jsonpCallback",
         jsonpCallback: "jsonpCallback",
         success: function (data) {
-//            console.log("getcurrentdata:"+data);
+            console.log("getcurrentdata:"+data);
             values = new Array();
 //            sensorId = new Array();
             depth = new Array();

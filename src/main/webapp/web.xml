@@ -39,4 +39,20 @@
 		<servlet-name>GetCurrentData</servlet-name>
 		<url-pattern>/GetCurrentData</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetAllHoles</servlet-name>
+		<servlet-class>Servlet.GetAllHoles</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAllHoles</servlet-name>
+		<url-pattern>/GetAllHoles</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GetAllShowHolesData</servlet-name>
+		<servlet-class>Servlet.GetAllShowHolesData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAllShowHolesData</servlet-name>
+		<url-pattern>/GetAllShowHolesData</url-pattern>
+	</servlet-mapping>
 </web-app>

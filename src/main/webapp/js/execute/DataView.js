@@ -40,6 +40,7 @@ for (var i = 0; i < JiKengSensors; i++)
 			    ellipsoid : {
 			        radii : new Cesium.Cartesian3(0.8, 0.8, 0.8),
 			        outline : true,
+
 			        outlineColor : Cesium.Color.GREY,
 			        outlineWidth : 2,
 			        material : Cesium.Color.fromAlpha(Cesium.Color.YELLOW,0.8)
@@ -64,7 +65,7 @@ for (var i = 0; i < JiKengSensors; i++)
 								18.0 - (j + 1) * 1.2 ],
 						material : Cesium.Color.fromAlpha(Cesium.Color.GREEN,
 								0.5)		
-					},
+					}
 					// description: '<iframe src="linechart.html" height="260" scrolling="no" frameborder="0" seamless></iframe>'		 allow-forms			
 					//description: description
 					// description: '<div id = "sbsb">GHJK</div>'

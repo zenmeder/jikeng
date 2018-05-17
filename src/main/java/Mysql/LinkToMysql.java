@@ -1,6 +1,5 @@
 package Mysql;
 
-//import org.json.JSONArray;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -130,7 +129,6 @@ public class LinkToMysql {
     public JSONArray getSensorPosition(String modelName){
 
         String sql = "select * from sensors where modelName="+"\""+modelName+"\"";
-//        Map<Integer, JSONObject> hm = new HashMap<Integer, JSONObject>();
         JSONArray ja = new JSONArray();
         try{
             ResultSet rs = stmt.executeQuery(sql);
@@ -142,9 +140,49 @@ public class LinkToMysql {
                 jo.put("latitude", rs.getString("latitude"));
                 jo.put("longitude", rs.getString("longitude"));
                 jo.put("height", rs.getString("height"));
+                jo.put("holesNum", rs.getInt("holesNum"));
                 ja.add(jo);
             }
-//            System.err.println("getSensorPosition output is "+ja);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return ja;
+    }
+    public static Integer getHolesNum(String modelName, Integer sensorId){
+        String sql = "select * from sensors where modelName="+"\""+modelName+"\""+" and sensorId="+"\""+sensorId+"\"";
+        Integer holesNum = -1;
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                holesNum =  rs.getInt("holesNum");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return holesNum;
+    }
+    /**
+     * 根据模型名和传感器id搜索色块信息
+     * @param modelName 模型名
+     * @param sensorId 传感器id
+     * @return 色块信息
+     */
+    public JSONArray getHolesPosition(String modelName, Integer sensorId){
+        String sql = "select * from holes where modelName="+"\""+modelName+"\" and sensorId="+sensorId+";";
+        String[] vars = {"east", "west", "south","north","maxHeight","minHeight","serialNum"};
+        System.out.println(sql);
+        JSONArray ja = new JSONArray();
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                JSONObject jo = new JSONObject();
+                jo.put("modelName", modelName);
+                jo.put("sensorId", sensorId);
+                for (String s: vars) {
+                    jo.put(s, rs.getString(s));
+                }
+                ja.add(jo);
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -152,7 +190,34 @@ public class LinkToMysql {
     }
 
     /**
-     * 将模型名， 传感器id以及位置存入表中
+     * 根据模型名搜索色块信息
+     * @param modelName 模型名
+     * @return
+     */
+    public JSONArray getAllHoles(String modelName){
+        String sql = "select * from holes where modelName="+"\""+modelName+"\"";
+        String[] vars = {"east", "west", "south","north","maxHeight","minHeight"};
+//        System.out.println(sql);
+        JSONArray ja = new JSONArray();
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                JSONObject jo = new JSONObject();
+                jo.put("modelName", modelName);
+                for (String s: vars) {
+                    jo.put(s, rs.getString(s));
+                    jo.put("serialNum", rs.getInt("serialNum"));
+                    jo.put("sensorId", rs.getInt("sensorId"));
+                }
+                ja.add(jo);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return ja;
+    }
+    /**
+     * 将模型名， 传感器id以及位置存入表中(deprecated)
      * @param modelName 模型名
      * @param sensorId 传感器id
      * @param position 位置
@@ -182,6 +247,37 @@ public class LinkToMysql {
         sql += "\""+latitude+"\",";
         sql += "\""+longitude+"\",";
         sql += "\""+height+"\")";
+        try{
+            stmt.execute(sql);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 将需要画在模型上的色块的配置信息存储在holes表里
+     * @param east 色块的位置信息
+     * @param south 色块的位置信息
+     * @param west 色块的位置信息
+     * @param north 色块的位置信息
+     * @param maxHeight 色块的位置信息
+     * @param minHeight 色块的位置信息
+     * @param modelName 色块对应的模型名
+     * @param sensorId 色块对应的传感器的id
+     * @param serialNum 色块在一列测孔中的序号
+     */
+    public void insertIntoHoles(String east, String south, String west, String north, String maxHeight, String minHeight,
+                                String modelName ,Integer sensorId, Integer serialNum){
+        String sql = "insert into holes(east, south, west, north, maxHeight, minHeight, modelName, sensorId, serialNum) values (";
+        sql += "\""+east+"\",";
+        sql += "\""+south+"\",";
+        sql += "\""+west+"\",";
+        sql += "\""+north+"\",";
+        sql += "\""+maxHeight+"\",";
+        sql += "\""+minHeight+"\",";
+        sql += "\""+modelName+"\",";
+        sql += sensorId+",";
+        sql += serialNum+")";
         try{
             stmt.execute(sql);
         }catch (SQLException e){

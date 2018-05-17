@@ -9,6 +9,16 @@ function findWithId(mid) {
             return myEntitiesArray[i];
     }
 }
+function SetPointColor(pointID, color) {
+    var currentPoint = findWithId(pointID);
+    // console.log("currentPoint", currentPoint);
+    if(typeof currentPoint === 'undefined'){
+
+        // console.log("currentPoint is undefined");
+    }else{
+        currentPoint.wall.material = Cesium.Color.fromAlpha(color, 0.5);
+    }
+}
 // 将模型翻转180度
 function createModel(id, show, Longitude, Latitude, url, height, scale, name,
                      description) {
@@ -61,8 +71,25 @@ function createSensor(data, i) {
         description: description
     });
 }
-
+function createHoles(data){
+    // console.log(data);
+    viewer.entities
+        .add({
+            name: '监测孔:' + data.sensorId + '-传感器:' + data.serialNum,
+            id : data.modelName+' CP' + data.sensorId + '-' + data.serialNum,
+            wall : {
+                // 与i相乘的参数是左右经纬度差值/6
+                positions : Cesium.Cartesian3
+                    .fromDegreesArray([data.east, data.south, data.west, data.north]),
+                maximumHeights : data.maxHeight.split(","),
+                minimumHeights : data.minHeight.split(","),
+                material : Cesium.Color.fromAlpha(Cesium.Color.GREEN,
+                    0.5)
+            }
+        });
+}
 var modelName = new Array();
+var holesData = null;
 /**
  * 根据用户名先调用GetAllModels获得该用户名所对应的所有model的modelName，
  * 再通过这些modelName调用GetAllSensors获得所有modelName对应的所有sensors并展示出来
@@ -108,36 +135,100 @@ function getModels(userName) {
                     console.log('Error!');
                 }
             });
-            // for(i=0;i<modelName.length;i++){
-            // console.log("modelName is "+modelName[i]);
-            //    $.ajax({
-            //        type : "post",
-            //        url : "/jikeng/GetAllSensors",
-            //        cache : false,
-            //        dataType : "jsonp", // 跨域请求需要使用jsonp
-            //        data : "modelName="+modelName[i],
-            //        jsonp : "jsonpCallback",
-            //        jsonpCallback : "jsonpCallback",
-            //        async : false,
-            //        success : function(data) {
-            //            console.log("got all sensors!");
-            //            console.log(data);
-            // 			for(i = 0;i<data.length;i++){
-            //                createSensor(data[i], i);
-            // 			}
-            //        },
-            //        error : function() {
-            //            console.log('Error!');
-            //        }
-            //    });
-            // }
+            $.ajax({
+                type: "post",
+                url: "/jikeng/GetAllHoles",
+                cache: false,
+                dataType: "jsonp", // 跨域请求需要使用jsonp
+                data: "jsonModelName=" + jsonModelName,
+                jsonp: "jsonpCallback",
+                jsonpCallback: "jsonpCallback",
+                async: false,
+                success: function (data) {
+                    console.log("got all holes!");
+                    console.log(data);
+                    holesData = data;
+                    for (i = 0; i < data.length; i++) {
+                        createHoles(data[i]);
+                    }
+                },
+                error: function () {
+                    console.log('Error!');
+                }
+            });
         },
         error: function () {
             console.log('Error!');
         }
     });
 }
+// function showCurrentData() {
+//     console.log(holesData);
+//     for(i=0;i<holesData.length;i++){
+//         cid = holesData[i].modelName+' CP' + holesData[i].sensorId + '-' + holesData[i].serialNum;
+//         console.log(cid);
+//     }
+// }
+function getAllShowHolesData() {
+    console.log(JSON.stringify(modelName));
+    var currentDate = sessionStorage.getItem('currentDate');
+    if(currentDate==null){
+        currentDate = "2014-03-27";
+    }
+    $.ajax({
+        type: "post",
+        url: "/jikeng/GetAllShowHolesData",
+        cache: false,
+        dataType: "jsonp", // 跨域请求需要使用jsonp
+        data: "jsonModelName=" + JSON.stringify(modelName)+"&date="+currentDate,
+        jsonp: "jsonpCallback",
+        jsonpCallback: "jsonpCallback",
+        async: false,
+        success: function (data) {
+            console.log("got all showHolesData!");
+            console.log(data);
+            for(i = 0;i<data.length;i++){
+                myID = data[i].modelName+' CP' + data[i].sensorId + '-' + data[i].serialNum;
+                myValue = data[i].value;
+                // 根据测得的数据改变每个点的颜色（60是最大值，防溢出处理）
+                if (myValue >= 50)
+                    SetPointColor(myID, new Cesium.Color(1.0, 0.0, 0.0, 0.5));
+                else if(myValue >= 40)
+                    SetPointColor(myID, new Cesium.Color(1.0 , 1.0, 0.0, 0.5));
+                else if(myValue >= 20)
+                    SetPointColor(myID, new Cesium.Color(0.5 , 1.0, 0.0, 0.5));
+                else
+                    SetPointColor(myID, new Cesium.Color(0.0 , 1.0, 0.0, 0.5));
+            }
+        },
+        error: function () {
+            console.log('Error!');
+        }
+    });
 
+}
+// function getCurrentData() {
+//     iData = "date="+sessionStorage.getItem("currentDate")+"&modelName="+JSON.stringify(modelName)+"&modelNums=plural";
+//     $.ajax({
+//         type: "post",
+//         url: "/jikeng/GetCurrentData",
+//         cache: false,
+//         dataType: "jsonp", // 跨域请求需要使用jsonp
+//         data: iData,
+//         jsonp: "jsonpCallback",
+//         jsonpCallback: "jsonpCallback",
+//         asnyc: false,
+//         success: function (data) {
+//             console.log(iData);
+//             console.log(data);
+//         },
+//         error: function () {
+//             console.log(iData + 'Error!');
+//         }
+//     });
+// }
+// var drawHoles = window.setInterval("showCurrentData()",4000);
+var getdata = window.setInterval("getAllShowHolesData()",4000);
 // createModel(12345, true, 12.6149828457345, 31.12263393139467, "models/123_out/123.gltf", 10,0.3,"lll","dsfjkl");
 getModels("jikeng1");
 // createModel(

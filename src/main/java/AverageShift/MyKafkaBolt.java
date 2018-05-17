@@ -19,7 +19,7 @@ public class MyKafkaBolt implements IBasicBolt {
      *
      */
     private static final long serialVersionUID = 1L;
-    private static final String tableName = "ds3";
+    private static final String tableName = "ds4";
     private static final String[] familes = {"depth"};
     private static  Logger logger = Logger.getLogger(MyKafkaBolt.class);
     public static void main(String[] args){

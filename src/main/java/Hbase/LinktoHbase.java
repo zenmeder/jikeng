@@ -302,7 +302,7 @@ public class LinktoHbase {
 					String mDepth = new String(rowKV.getQualifier()) + ";";
 					String mValue = new String(rowKV.getValue());
 					String mData = mTime + mDepth + mValue;
-					DatatoJson.InsertJsonTable(jsonTable, mData);
+					DatatoJson.InsertJsonTable(jsonTable, mData, tableName);
 				}
 			}
 		} catch (IOException e) {
@@ -312,6 +312,36 @@ public class LinktoHbase {
 				table.close();
 		}
 
+		return jsonTable;
+	}
+	public static JSONArray SelectDataByTimeAndSensorId(String startTime, String endTime, String tableName, Integer sensorId) throws IOException{
+//		System.out.println("SelectDataByTimeAndSensorId: "+startTime+endTime+tableName+sensorId);
+		HTable table = null;
+		JSONArray jsonTable = new JSONArray();
+		try {
+			table = new HTable(conf, tableName);
+			Scan myScanner = new Scan();
+			byte[] startBytes = startTime.getBytes("UTF8");
+			byte[] endBytes = endTime.getBytes("UTF8");
+			myScanner.setStartRow(startBytes);
+			myScanner.setStopRow(endBytes);
+			ResultScanner rs = table.getScanner(myScanner);
+			for (Result r : rs) {
+				for (KeyValue rowKV : r.raw()) {
+					String mTime = new String(rowKV.getRow()) + ";";
+					String mDepth = new String(rowKV.getQualifier()) + ";";
+					String mValue = new String(rowKV.getValue());
+					String mData = mTime + mDepth + mValue;
+					String sid = mTime.substring(mTime.indexOf("|")+1);
+					if( sid.equals(String.valueOf(sensorId) + ";")){
+						DatatoJson.InsertJsonTable(jsonTable, mData, tableName);
+					}
+				}
+			}
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+//		System.out.println(jsonTable);
 		return jsonTable;
 	}
 	public static JSONArray SelectDatabyTime(String startTime, String endTime, String tableName) throws IOException {
@@ -331,7 +361,7 @@ public class LinktoHbase {
 					String mDepth = new String(rowKV.getQualifier()) + ";";
 					String mValue = new String(rowKV.getValue());
 					String mData = mTime + mDepth + mValue;
-					DatatoJson.InsertJsonTable(jsonTable, mData);
+					DatatoJson.InsertJsonTable(jsonTable, mData, tableName);
 				}
 			}
 		} catch (IOException e) {
@@ -365,7 +395,7 @@ public class LinktoHbase {
 					String mDepth = new String(rowKV.getQualifier()) + ";";
 					String mValue = new String(rowKV.getValue());
 					String mData = mTime + mDepth + mValue;
-					DatatoJson.InsertJsonTable(jsonTable, mData);
+					DatatoJson.InsertJsonTable(jsonTable, mData, tableName);
 				}
 			}
 		} catch (IOException e) {
@@ -403,7 +433,7 @@ public class LinktoHbase {
 					String mValue = new String(rowKV.getValue());
 					String mData = mTime + mDepth + mValue;
 					//System.out.println(mData);
-					DatatoJson.InsertJsonTable(jsonTable, mData);
+					DatatoJson.InsertJsonTable(jsonTable, mData, tableName);
 					TempTime = mTime;
 				}
 			}
@@ -441,7 +471,7 @@ public class LinktoHbase {
 					String mDepth = new String(rowKV.getQualifier()) + ";";
 					String mValue = new String(rowKV.getValue());
 					String mData = mTime + mDepth + mValue;
-					DatatoJson.InsertJsonTable(jsonTable, mData);	
+					DatatoJson.InsertJsonTable(jsonTable, mData, tableName);
 				}
 			}
 //			System.out.println("jsonTable: "+jsonTable);

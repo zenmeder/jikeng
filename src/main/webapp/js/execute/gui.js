@@ -27,24 +27,62 @@ backToJK.on("click", function(){
 		}
 	});
 });
-$("<br />").appendTo(SandcastleGUI);
-
-var realtime = $("<button id = 'real-time'>实时数据</button>").addClass("cesium-button")
-.css({
-    "margin-left": "10px",
-    "width": "145px",
-    "background-color": "rgba(0, 0, 0, 0.3)"
+var goToJikeng1 = $("<button id = 'goToJikeng1'>前往jikeng1</button>").addClass("cesium-button")
+    .css({
+        "margin-left": "10px",
+        "width": "145px",
+        "background-color": "rgba(0, 0, 0, 0.3)"
     }).appendTo(SandcastleGUI);
-realtime.on("click", function(){
-    switchBetweenAutoAndAccumulate = 1;
-    myDate = "now";
-	// 每隔5000ms向服务器请求一次当前CurrentData，并将数据写入mydata（jsonArray）变量中
-	nowFunc = window.setInterval("sendDateBack('now')", 5000);
-	// View data repeatedly per 5001 ms
-	DrawControl = window.setInterval("showCurrentData()", 5001);
-	useHistory = 0;
+goToJikeng1.on("click", function(){
+    $("#font-id").css({"color": "black"});
+    viewer.camera.flyTo({
+        destination : new Cesium.Cartesian3.fromDegrees(121.614127541442571,
+            32.122189347505586, 30.0),
+        orientation : {
+            direction : new Cesium.Cartesian3(-0.4439097425797499,
+                -0.8827963025381418, 0.15367117058102756),
+            up : new Cesium.Cartesian3(-0.6577530259363744, 0.437483168692811,
+                0.6131634643241887)
+        }
+    });
+});
+var goToJikeng3 = $("<button id = 'goToJikeng2'>前往jikeng3</button>").addClass("cesium-button")
+    .css({
+        "margin-left": "10px",
+        "width": "145px",
+        "background-color": "rgba(0, 0, 0, 0.3)"
+    }).appendTo(SandcastleGUI);
+goToJikeng3.on("click", function(){
+    $("#font-id").css({"color": "black"});
+    viewer.camera.flyTo({
+        destination : new Cesium.Cartesian3.fromDegrees(121.614127541442571,
+            33.122189347505586, 30.0),
+        orientation : {
+            direction : new Cesium.Cartesian3(-0.4439097425797499,
+                -0.8827963025381418, 0.15367117058102756),
+            up : new Cesium.Cartesian3(-0.6577530259363744, 0.437483168692811,
+                0.6131634643241887)
+        }
+    });
 });
 $("<br />").appendTo(SandcastleGUI);
+
+// var realtime = $("<button id = 'real-time'>实时数据</button>").addClass("cesium-button")
+// .css({
+//     "margin-left": "10px",
+//     "width": "145px",
+//     "background-color": "rgba(0, 0, 0, 0.3)"
+//     }).appendTo(SandcastleGUI);
+// realtime.on("click", function(){
+//     switchBetweenAutoAndAccumulate = 1;
+//     myDate = "now";
+// 	// 每隔5000ms向服务器请求一次当前CurrentData，并将数据写入mydata（jsonArray）变量中
+// 	nowFunc = window.setInterval("sendDateBack('now')", 5000);
+// 	// View data repeatedly per 5001 ms
+// 	DrawControl = window.setInterval("showCurrentData()", 5001);
+// 	useHistory = 0;
+// });
+// $("<br />").appendTo(SandcastleGUI);
 
 var historyBox = $("<div id = 'history-box'><div>").appendTo(SandcastleGUI);
 historyBox.css({
@@ -74,7 +112,12 @@ var DatePicker_div = $("<div id='datepicker_div'></div>").css({
 //2013-10-05 is default
 //var DatePicker = $("<input type='date' id='datepicker' value='2013-10-05' min='2013-10-05' max='2013-10-10' onchange='log_c()'/>");
 // var DatePicker = $("<input type='date' id='datepicker' value='2015-02-28' onchange='changeDate()'/>");
-var DatePicker = $("<input type='date' id='datepicker' value="+sessionStorage.getItem('currentDate')+" onchange='changeDate()'/>");
+var d = sessionStorage.getItem('currentDate');
+console.log(d);
+if(d==null){
+	d = "2014-03-27";
+}
+var DatePicker = $("<input type='date' id='datepicker' value="+d+" onchange='changeDate()'/>");
 
 DatePicker.appendTo($("#history-box"));
 // DatePicker_div.appendTo($("body"));
