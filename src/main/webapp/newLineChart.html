@@ -30,6 +30,22 @@
     var modelName = GetQueryString("modelName");
     var iData =  "date="+date+"&modelName="+modelName+"&modelNums=single";
     var sensorId = GetQueryString("sensorId");
+    var predict_data;
+    $.ajax({
+        type:"post",
+        url:"http://10.222.67.208:8000/predict",
+        cache:false,
+        dateType:"jsonp",
+        data: "date="+date+"&modelName="+modelName+"&sensorId="+sensorId,
+        jsonp: "jsonpCallback",
+        jsonpCallback: "jsonpCallback",
+        async: false,
+        success: function (data) {
+            console.log(data);
+            predict_data = data;
+        }
+    });
+    console.log(predict_data);
     $.ajax({
         type:"post",
         url:url,
@@ -46,89 +62,163 @@
             for(var i = 0; i<data.length;i++){
                 if(typeof(values[data[i].sensorId-1]) == "undefined"){
                     values[data[i].sensorId-1] = new Array();
-//                    sensorId.push("sensor"+data[i].sensorId);
                 }
                 values[data[i].sensorId-1][data[i].depth] = data[i].value;
             }
-            for(var j = 0;j<values[0].length;j++){
+            for(var j = 0;j<values[sensorId-1].length;j++){
                 depth.push(j);
             }
-//            console.log("values is: "+values);
-//            console.log("depth is:"+depth);
-            options = {
-                title:{
+//            console.log(sensorId);
+            console.log(values);
+            console.log(predict_data);
+            console.log(values[sensorId-1]);
+//            console.log("sensors:"+values[4]);
+//            console.log("depth:"+depth);
+//            options = {
+//                title:{
+//                    text:date+" "+modelName+'监测孔'+sensorId+'数据图'
+//                },
+//                xAxis: {
+//                    type: 'category',
+//                    data: depth
+//                },
+//                yAxis: {
+//                    type: 'value'
+//                },
+//                tooltip: {
+//                    trigger: 'axis'
+//                },
+//                series: [{
+//                    data: values[sensorId-1],
+//                    type: 'line'
+//                }]
+//            };
+            option = {
+                title: {
                     text:date+" "+modelName+'监测孔'+sensorId+'数据图'
                 },
-                xAxis: {
-                    type: 'category',
-                    data: depth
+                tooltip : {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
                 },
-                yAxis: {
-                    type: 'value'
+                legend: {
+                    data:['当天数据','第一天', '第二天', '第三天', '第四天','第五天','第六天','第七天']
                 },
-                tooltip: {
-                    trigger: 'axis'
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
                 },
-                series: [{
-                    data: values[sensorId-1],
-                    type: 'line'
-                }]
-            };
-//            options = {
-//                title: {
-//                    text: date+" "+modelName+'传感器数据图',
-//                },
-//                tooltip : {
-//                    trigger: 'axis',
-//                    axisPointer: {
-//                        type: 'cross',
-//                        label: {
-//                            backgroundColor: '#6a7985'
-//                        }
-//                    }
-//                },
-////                legend: {
-////                    data:sensorId
-////                },
-//                toolbox: {
-//                    feature: {
-//                        saveAsImage: {}
-//                    }
-//                },
-//                grid: {
-//                    left: '3%',
-//                    right: '4%',
-//                    bottom: '3%',
-//                    containLabel: true
-//                },
-//                xAxis : [
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : depth
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'当天数据',
+                        type:'line',
+                        stack: '数据',
+                        data: values[sensorId-1]
+                    },
+                    {
+                        name:'第一天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["0"]
+                    },
+                    {
+                        name:'第二天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["1"]
+                    },
+                    {
+                        name:'第三天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["2"]
+                    }
+                    ,{
+                        name:'第四天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["3"]
+                    }
+                    ,{
+                        name:'第五天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["4"]
+                    }
+                    ,{
+                        name:'第六天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["5"]
+                    },
+                    {
+                        name:'第七天',
+                        type:'line',
+                        stack: '数据',
+                        data: predict_data["6"]
+                    }
 //                    {
-//                        type : 'category',
-//                        boundaryGap : false,
-//                        data : depth
-//                    }
-//                ],
-//                yAxis : [
-//                    {
-//                        type : 'value'
-//                    }
-//                ]
-//            };
-//            options["series"] = new Array();
-//            for(i = 0; i<sensorId.length;i++){
-//                if(postSensorId == sensorId[i]){
-//                    var d = {
-//                        name:sensorId[i],
+//                        name:'联盟广告',
 //                        type:'line',
 //                        stack: '总量',
 //                        areaStyle: {normal: {}},
-//                        data:values[i]
-//                    };
-//                    options["series"].push(d);
-//                }
-//            }
-            console.log(options);
-            myChart.setOption(options);
+//                        data:[220, 182, 191, 234, 290, 330, 310]
+//                    },
+//                    {
+//                        name:'视频广告',
+//                        type:'line',
+//                        stack: '总量',
+//                        areaStyle: {normal: {}},
+//                        data:[150, 232, 201, 154, 190, 330, 410]
+//                    },
+//                    {
+//                        name:'直接访问',
+//                        type:'line',
+//                        stack: '总量',
+//                        areaStyle: {normal: {}},
+//                        data:[320, 332, 301, 334, 390, 330, 320]
+//                    },
+//                    {
+//                        name:'搜索引擎',
+//                        type:'line',
+//                        stack: '总量',
+//                        label: {
+//                            normal: {
+//                                show: true,
+//                                position: 'top'
+//                            }
+//                        },
+//                        areaStyle: {normal: {}},
+//                        data:[820, 932, 901, 934, 1290, 1330, 1320]
+//                    }
+                ]
+            };
+            console.log(option);
+            myChart.setOption(option);
 
         },
         error: function () {

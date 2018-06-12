@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class LinkToMysql {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/jikeng";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/mysql";
     private static final String userName = "root";
     private static final String passwd = "hyx19920831";
     private static Connection conn = null;
@@ -37,7 +37,7 @@ public class LinkToMysql {
      * todo 根据用户名来筛选展示哪些模型
      */
     public JSONArray getModels(){
-        String sql = "select * from models";
+        String sql = "select * from Buildings_models";
         JSONArray res = new JSONArray();
         try{
             ResultSet rs = stmt.executeQuery(sql);
@@ -99,7 +99,7 @@ public class LinkToMysql {
             args.add("description");
             values.add(description);
         }
-        String sql = "insert into models(";
+        String sql = "insert into Buildings_models(";
         for(int i = 0; i<args.size();i++){
             sql += args.get(i);
             if(i<args.size()-1){
@@ -128,7 +128,7 @@ public class LinkToMysql {
      */
     public JSONArray getSensorPosition(String modelName){
 
-        String sql = "select * from sensors where modelName="+"\""+modelName+"\"";
+        String sql = "select * from Buildings_sensors where modelName="+"\""+modelName+"\"";
         JSONArray ja = new JSONArray();
         try{
             ResultSet rs = stmt.executeQuery(sql);
@@ -149,7 +149,7 @@ public class LinkToMysql {
         return ja;
     }
     public static Integer getHolesNum(String modelName, Integer sensorId){
-        String sql = "select * from sensors where modelName="+"\""+modelName+"\""+" and sensorId="+"\""+sensorId+"\"";
+        String sql = "select * from Buildings_sensors where modelName="+"\""+modelName+"\""+" and sensorId="+"\""+sensorId+"\"";
         Integer holesNum = -1;
         try {
             ResultSet rs = stmt.executeQuery(sql);
@@ -168,7 +168,7 @@ public class LinkToMysql {
      * @return 色块信息
      */
     public JSONArray getHolesPosition(String modelName, Integer sensorId){
-        String sql = "select * from holes where modelName="+"\""+modelName+"\" and sensorId="+sensorId+";";
+        String sql = "select * from Buildings_holes where modelName="+"\""+modelName+"\" and sensorId="+sensorId+";";
         String[] vars = {"east", "west", "south","north","maxHeight","minHeight","serialNum"};
         System.out.println(sql);
         JSONArray ja = new JSONArray();
@@ -195,7 +195,7 @@ public class LinkToMysql {
      * @return
      */
     public JSONArray getAllHoles(String modelName){
-        String sql = "select * from holes where modelName="+"\""+modelName+"\"";
+        String sql = "select * from Buildings_holes where modelName="+"\""+modelName+"\"";
         String[] vars = {"east", "west", "south","north","maxHeight","minHeight"};
 //        System.out.println(sql);
         JSONArray ja = new JSONArray();
@@ -224,7 +224,7 @@ public class LinkToMysql {
      */
     public void insertSensorPosition(String modelName, Integer sensorId, String position){
         try{
-            String sql = "insert into sensors(modelName, sensorId, position) values ("+"\""+modelName+"\""+", "+sensorId+", ";
+            String sql = "insert into Buildings_sensors(modelName, sensorId, position) values ("+"\""+modelName+"\""+", "+sensorId+", ";
             sql += "\"" + position +"\")";
             stmt.execute(sql);
         }catch (SQLException e){
@@ -241,7 +241,7 @@ public class LinkToMysql {
      * @param height 高度
      */
     public void insertSensorPositionByLLH(String modelName, Integer sensorId,String latitude, String longitude, String height){
-        String sql = "insert into sensors(modelName, sensorId, latitude, longitude, height) values (";
+        String sql = "insert into Buildings_sensors(modelName, sensorId, latitude, longitude, height) values (";
         sql += "\""+modelName+"\",";
         sql += "\""+sensorId+"\",";
         sql += "\""+latitude+"\",";
@@ -268,7 +268,7 @@ public class LinkToMysql {
      */
     public void insertIntoHoles(String east, String south, String west, String north, String maxHeight, String minHeight,
                                 String modelName ,Integer sensorId, Integer serialNum){
-        String sql = "insert into holes(east, south, west, north, maxHeight, minHeight, modelName, sensorId, serialNum) values (";
+        String sql = "insert into Buildings_holes(east, south, west, north, maxHeight, minHeight, modelName, sensorId, serialNum) values (";
         sql += "\""+east+"\",";
         sql += "\""+south+"\",";
         sql += "\""+west+"\",";

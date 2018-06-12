@@ -67,39 +67,39 @@ public class MysqlUtil {
     }
     public static void  main(String[] args){
         LinkToMysql ltm = new LinkToMysql();
-        String date = "2014-03-27";
-        List ja = Arrays.asList("jikeng1","jikeng2","jikeng3");
-        String startTime = date + " 00:00:01";
-        String endTime = date + " 23:59:59";
-        Map<String, JSONArray> m = new HashMap<String, JSONArray>();
-        for(int i = 0; i<ja.size();i++){
-            m.put(ja.get(i).toString(), ltm.getSensorPosition(ja.get(i).toString()));
-        }
-        Map<String, JSONArray> r = new HashMap<String, JSONArray>();
-        for(Map.Entry<String, JSONArray> entry: m.entrySet()){
-            for(int i = 0; i<entry.getValue().size();i++){
-                String sid = ""+entry.getValue().getJSONObject(i).get("sensorId");
-                String k = entry.getKey()+"-"+entry.getValue().getJSONObject(i).get("sensorId");
-                try {
-                    JSONArray ja1 = LinktoHbase.SelectDataByTimeAndSensorId(startTime, endTime, entry.getKey(), Integer.parseInt(sid));
-                    if(r.containsKey(k)){
-                        r.get(k).addAll(ja1);
-                    }else{
-                        r.put(k, ja1);
-                    }
-                    r.put(k, sortJsonArray(r.get(k)));
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
-        JSONArray res = new JSONArray();
-        for(Map.Entry<String, JSONArray> entry: r.entrySet()) {
-            String[] k = entry.getKey().split("-");
-            entry.setValue(substract(entry.getValue(), LinkToMysql.getHolesNum(k[0],Integer.parseInt(k[1]))));
-            res.addAll(entry.getValue());
-        }
-        System.out.println(res);
+//        String date = "2014-03-27";
+//        List ja = Arrays.asList("jikeng1","jikeng2","jikeng3");
+//        String startTime = date + " 00:00:01";
+//        String endTime = date + " 23:59:59";
+//        Map<String, JSONArray> m = new HashMap<String, JSONArray>();
+//        for(int i = 0; i<ja.size();i++){
+//            m.put(ja.get(i).toString(), ltm.getSensorPosition(ja.get(i).toString()));
+//        }
+//        Map<String, JSONArray> r = new HashMap<String, JSONArray>();
+//        for(Map.Entry<String, JSONArray> entry: m.entrySet()){
+//            for(int i = 0; i<entry.getValue().size();i++){
+//                String sid = ""+entry.getValue().getJSONObject(i).get("sensorId");
+//                String k = entry.getKey()+"-"+entry.getValue().getJSONObject(i).get("sensorId");
+//                try {
+//                    JSONArray ja1 = LinktoHbase.SelectDataByTimeAndSensorId(startTime, endTime, entry.getKey(), Integer.parseInt(sid));
+//                    if(r.containsKey(k)){
+//                        r.get(k).addAll(ja1);
+//                    }else{
+//                        r.put(k, ja1);
+//                    }
+//                    r.put(k, sortJsonArray(r.get(k)));
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        JSONArray res = new JSONArray();
+//        for(Map.Entry<String, JSONArray> entry: r.entrySet()) {
+//            String[] k = entry.getKey().split("-");
+//            entry.setValue(substract(entry.getValue(), LinkToMysql.getHolesNum(k[0],Integer.parseInt(k[1]))));
+//            res.addAll(entry.getValue());
+//        }
+//        System.out.println(res);
 //        for(int i = 0; i<sensors.size();i++){
 //            Integer holesNum = sensors.getJSONObject(i).getInt("holesNum");
 //            String modelName = sensors.getJSONObject(i).getString("modelName");
@@ -139,16 +139,16 @@ public class MysqlUtil {
 //            System.out.println(a.get(i).toString());
 //        }
         for(int i = 1; i<7;i++){
-            for(int j = 0; j<15;j++){
+            for(int j = 0; j<110;j++){
                 String east = Double.toString(121.614983531255533 + i * 0.000012782699573203141);
-                String south = Double.toString(33.122592361610856 - i * 0.00005276838845524878);
+                String south = Double.toString(31.122592361610856 - i * 0.00005276838845524878);
                 String west = Double.toString(121.614983531255533 + (i + 1) * 0.000012782699573203141);
-                String north = Double.toString(33.122592361610856 - (i + 1) * 0.00005276838845524878);
-                String maxHeight = Double.toString(18.0 - j * 1.2) + "," + Double.toString(18.0 - j * 1.2);
-                String minHeight = Double.toString(18.0 - (j+1) * 1.2) + "," + Double.toString(18.0 - (j+1) * 1.2);
+                String north = Double.toString(31.122592361610856 - (i + 1) * 0.00005276838845524878);
+                String maxHeight = Double.toString(18.0 - j * 0.163636364) + "," + Double.toString(18.0 - j * 0.163636364);
+                String minHeight = Double.toString(18.0 - (j+1) * 0.163636364) + "," + Double.toString(18.0 - (j+1) * 0.163636364);
                 Integer sensorId = i;
                 Integer serialNum = j;
-                String modelName = "jikeng3";
+                String modelName = "jikeng2";
                 ltm.insertIntoHoles(east, south, west, north, maxHeight, minHeight, modelName,sensorId, serialNum);
             }
         }

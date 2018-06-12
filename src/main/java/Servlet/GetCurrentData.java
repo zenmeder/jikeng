@@ -53,6 +53,7 @@ public class GetCurrentData extends HttpServlet {
 		else if(modelNums.equals("single")) {
 			String startTime = date + " 00:00:01";
 			String endTime = date + " 23:59:59";
+			System.out.println("date is "+date);
 			jsonpOut = LinktoHbase.SelectDatabyTime(startTime, endTime, tableName);
 		}else{
 			String startTime = date + " 00:00:01";
