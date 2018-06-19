@@ -33,7 +33,7 @@
     var predict_data;
     $.ajax({
         type:"post",
-        url:"http://10.222.67.208:8000/predict",
+        url:"http://10.171.6.168:8000/predict",
         cache:false,
         dateType:"jsonp",
         data: "date="+date+"&modelName="+modelName+"&sensorId="+sensorId,
@@ -95,7 +95,7 @@
 //            };
             option = {
                 title: {
-                    text:date+" "+modelName+'监测孔'+sensorId+'数据图'
+//                    text:date+" "+modelName+'监测孔'+sensorId+'数据图'
                 },
                 tooltip : {
                     trigger: 'axis',

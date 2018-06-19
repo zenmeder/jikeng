@@ -65,6 +65,31 @@ public class MysqlUtil {
         }
         return res;
     }
+
+    /**
+     * init holes data
+     */
+    public void initHoles(){
+        LinkToMysql ltm = new LinkToMysql();
+        for(int i = 1; i<=6;i++){
+            double longitude = 121.614983531255533+ i * 0.000012782699573203141 + 0.0000063913497866;
+            double latitude = 32.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
+            double height = 18.0;
+            ltm.insertSensorPositionByLLH("jikeng1", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
+        }
+        for(int i = 1; i<=6;i++){
+            double longitude = 121.614983531255533+ i * 0.000012782699573203141 + 0.0000063913497866;
+            double latitude = 31.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
+            double height = 18.0;
+            ltm.insertSensorPositionByLLH("jikeng2", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
+        }
+        for(int i = 1; i<=6;i++){
+            double longitude = 121.614983531255533+ i * 0.000012782699573203141 + 0.0000063913497866;
+            double latitude = 33.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
+            double height = 18.0;
+            ltm.insertSensorPositionByLLH("jikeng3", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
+        }
+    }
     public static void  main(String[] args){
         LinkToMysql ltm = new LinkToMysql();
 //        String date = "2014-03-27";
@@ -138,20 +163,20 @@ public class MysqlUtil {
 //        for(int i=0; i<a.size();i++){
 //            System.out.println(a.get(i).toString());
 //        }
-        for(int i = 1; i<7;i++){
-            for(int j = 0; j<110;j++){
-                String east = Double.toString(121.614983531255533 + i * 0.000012782699573203141);
-                String south = Double.toString(31.122592361610856 - i * 0.00005276838845524878);
-                String west = Double.toString(121.614983531255533 + (i + 1) * 0.000012782699573203141);
-                String north = Double.toString(31.122592361610856 - (i + 1) * 0.00005276838845524878);
-                String maxHeight = Double.toString(18.0 - j * 0.163636364) + "," + Double.toString(18.0 - j * 0.163636364);
-                String minHeight = Double.toString(18.0 - (j+1) * 0.163636364) + "," + Double.toString(18.0 - (j+1) * 0.163636364);
-                Integer sensorId = i;
-                Integer serialNum = j;
-                String modelName = "jikeng2";
-                ltm.insertIntoHoles(east, south, west, north, maxHeight, minHeight, modelName,sensorId, serialNum);
-            }
-        }
+//        for(int i = 1; i<7;i++){
+//            for(int j = 0; j<110;j++){
+//                String east = Double.toString(121.614983531255533 + i * 0.000012782699573203141);
+//                String south = Double.toString(33.122592361610856 - i * 0.00005276838845524878);
+//                String west = Double.toString(121.614983531255533 + (i + 1) * 0.000012782699573203141);
+//                String north = Double.toString(33.122592361610856 - (i + 1) * 0.00005276838845524878);
+//                String maxHeight = Double.toString(18.0 - j * 0.163636364) + "," + Double.toString(18.0 - j * 0.163636364);
+//                String minHeight = Double.toString(18.0 - (j+1) * 0.163636364) + "," + Double.toString(18.0 - (j+1) * 0.163636364);
+//                Integer sensorId = i;
+//                Integer serialNum = j;
+//                String modelName = "jikeng3";
+//                ltm.insertIntoHoles(east, south, west, north, maxHeight, minHeight, modelName,sensorId, serialNum);
+//            }
+//        }
 //        JSONArray ja = ltm.getSensorPosition("jikeng1");
 //        JSONArray ja2 = ltm.getSensorPosition("jikeng2");
 //        System.out.println(ja);
@@ -186,9 +211,9 @@ public class MysqlUtil {
 //        ltm.insertSensorPosition("jikeng1",1,"121.614983531255533,31.122592361610856");
 //        for(int i = 1; i<=6;i++){
 //            double longitude = 121.614983531255533+ i * 0.000012782699573203141 + 0.0000063913497866;
-//            double latitude = 33.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
+//            double latitude = 32.122592361610856 - i * 0.00005276838845524878 - 0.0000263841942276;
 //            double height = 18.0;
-//            ltm.insertSensorPositionByLLH("jikeng3", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
+//            ltm.insertSensorPositionByLLH("jikeng1", i, String.valueOf(latitude), String.valueOf(longitude), String.valueOf(height));
 //        }
 //        Map<Integer, String> m = ltm.getSensorPosition("jikeng1");
 //        for(Map.Entry<Integer, String> entry: m.entrySet()){

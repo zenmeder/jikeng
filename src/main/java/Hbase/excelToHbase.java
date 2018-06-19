@@ -32,7 +32,7 @@ public class excelToHbase {
 			  HBaseUtils.deleteTable(modelName);
 			  HBaseUtils.creatTable(modelName,families);
 		  }
-            dataconverter.execute("/Users/zhaoyu/Desktop/jikeng/src/main/webapp/dataSample.xls",modelName);
+            dataconverter.execute("/home/zhaoyu/Desktop/zhaoyu/jikeng/dataSample.xls",modelName);
 	  }
 	  catch(Exception e){
 		  e.printStackTrace();

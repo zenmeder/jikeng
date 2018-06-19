@@ -14,7 +14,7 @@ public class LinkToMysql {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/mysql";
     private static final String userName = "root";
-    private static final String passwd = "hyx19920831";
+    private static final String passwd = "hadoop";
     private static Connection conn = null;
     private static Statement stmt = null;
 
@@ -247,6 +247,9 @@ public class LinkToMysql {
         sql += "\""+latitude+"\",";
         sql += "\""+longitude+"\",";
         sql += "\""+height+"\")";
+//        sql += holesNum + ",";
+//        sql += interval +")";
+        System.out.println(sql);
         try{
             stmt.execute(sql);
         }catch (SQLException e){
