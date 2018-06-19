@@ -23,7 +23,7 @@ import Hbase.HBaseUtils;
 public class excelToHbase {
   public static void main(String[] args){
 	  excelToHbase dataconverter=new excelToHbase();
-	  String modelName = "jikeng1";
+	  String modelName = "jikeng4";
 	  try{
 		  String[] families={"depth"};
 		  if(!HBaseUtils.doesTableExists(modelName))
