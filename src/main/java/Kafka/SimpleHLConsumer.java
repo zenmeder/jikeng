@@ -14,7 +14,7 @@ import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 
-public class SimpleHLConsumer {
+public class Consumer {
     private final ConsumerConnector consumer;
     private final String topic;
 
